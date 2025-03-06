@@ -8,7 +8,7 @@ type ProductData = {
     [k: string]: FormDataEntryValue;
 }
 
-export async function addProduct(data: ProductData) {
+export async function addProduct(data:ProductData) {
     try {
 
 
@@ -18,12 +18,11 @@ export async function addProduct(data: ProductData) {
                 price:+data.price
             }
         )
-        console.log(result);
-        
+     
         if(result.success){
 
             const url=`${import.meta.env.VITE_API_URL}/api/products`
-            const {data}= await axios.post(url,{
+            await axios.post(url,{
                 name:result.output.name,
                 price:result.output.price
             })
