@@ -2,10 +2,10 @@
 
 import { Link, Form, useActionData, ActionFunctionArgs } from "react-router-dom"
 import ErrorMessage from "../components/ErrorMessage"
+import { addProduct } from "../services/ProductServices"
 
 
-
-export async function action({ request}:ActionFunctionArgs) {
+export async function action({request}:ActionFunctionArgs) {
 
   const data = Object.fromEntries(await request.formData())
   let error = ''
@@ -13,10 +13,14 @@ export async function action({ request}:ActionFunctionArgs) {
   if (Object.values(data).includes('')) {
     error = 'Todos los campos son obligatorios'
   }
+
   if (error.length) {
 
     return error
   }
+  addProduct(data)
+
+
 
 }
 
