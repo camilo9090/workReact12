@@ -91,3 +91,6 @@ export async function getProductsById(id:Product['id']) {
     }
 
 }
+export async function updateProduct(data:ProductData,id:Product['id']) {
+    
+}

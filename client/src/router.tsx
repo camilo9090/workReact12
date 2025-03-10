@@ -29,7 +29,8 @@ export const router = createBrowserRouter([
             {
                 path: 'productos/:id/editar',
                 element:<EditProduct/>,
-                loader:editPRoductLoader
+                loader:editPRoductLoader,
+                action:editProductAction
 
             }
         ]

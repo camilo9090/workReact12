@@ -1,11 +1,14 @@
 
 
-import { Link, Form, useActionData, ActionFunctionArgs, redirect, LoaderFunctionArgs,useLoaderData } from "react-router-dom"
+import { Link, Form, useActionData, ActionFunctionArgs, redirect, LoaderFunctionArgs, useLoaderData } from "react-router-dom"
 import ErrorMessage from "../components/ErrorMessage"
-import { addProduct, getProductsById } from "../services/ProductServices"
+import { getProductsById, updateProduct } from "../services/ProductServices"
 import { Product } from "../types"
 
-
+const availabilityOptions = [
+  { name: 'Disponible', value: true },
+  { name: 'No Disponible', value: false }
+]
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.id !== undefined) {
     const product = await getProductsById(+params.id)
@@ -19,7 +22,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
 }
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
 
 
   const data = Object.fromEntries(await request.formData())
@@ -33,16 +36,20 @@ export async function action({ request }: ActionFunctionArgs) {
 
     return error
   }
-  await addProduct(data)
+  if (params.id !== undefined) {
+    await updateProduct(data, +params.id)
+    return redirect('/')
+  }
 
-  return redirect('/')
+
+
 
 }
 
 export default function EditProduct() {
 
   const error = useActionData()
-  const product=useLoaderData() as Product
+  const product = useLoaderData() as Product
 
 
   return (
@@ -95,6 +102,23 @@ export default function EditProduct() {
             name="price"
             defaultValue={product.price}
           />
+        </div>
+
+        <div className="mb-4">
+          <label
+            className="text-gray-800"
+            htmlFor="availability"
+          >Disponibilidad:</label>
+          <select
+            id="availability"
+            className="mt-2 block w-full p-3 bg-gray-50"
+            name="availability"
+            defaultValue={product?.availability.toString()}
+          >
+            {availabilityOptions.map(option => (
+              <option key={option.name} value={option.value.toString()}>{option.name}</option>
+            ))}
+          </select>
         </div>
         <input
           type="submit"
